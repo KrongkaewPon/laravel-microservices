@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  user_backend:
+    build: .
+    ports:
+      - 8001:8000
+    volumes:
+      - /app/vendor
+      - .:/app
+    command: "php artisan serve --host=0.0.0.0"
+    depends_on:
+      - user_db
+  user_db:
+    image: amd64/mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: user_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./storage/dbdata:/var/lib/mysql
