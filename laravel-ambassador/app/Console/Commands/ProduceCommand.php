@@ -43,6 +43,10 @@ class ProduceCommand extends Command
         // ProduceJob::dispatch();
 
         $order = Order::find(1);
-        OrderCompletedJob::dispatch($order->toArray());
+
+        $array = $order->toArray();
+        $array['ambassador_revenue'] = $order->ambassador_revenue;
+
+        OrderCompletedJob::dispatch($array);
     }
 }
