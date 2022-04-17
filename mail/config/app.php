@@ -177,7 +177,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\KafkaServiceProvider::class,
+        \Kafka\KafkaServiceProvider::class,
+        // App\Providers\KafkaServiceProvider::class,
 
     ],
 
