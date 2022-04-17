@@ -7,12 +7,19 @@
         "laravel"
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/KrongkaewPon/kafka-queue.git"
+        }
+    ],
     "require": {
         "php": "^7.4|^8.0",
         "cartalyst/stripe": "^2.4",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "krongkaewpon/kafka-queue": "dev-main",
         "laravel/framework": "^8.12",
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5",
@@ -46,7 +53,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Kafka\\": "vendor/krongkaewpon/kafka-queue/src/"
         }
     },
     "minimum-stability": "dev",
