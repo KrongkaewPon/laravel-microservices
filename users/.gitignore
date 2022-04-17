@@ -13,3 +13,5 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_Store
+/storage/dbdata/*
+/storage/logs
