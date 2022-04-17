@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\Order;
 use App\Models\Link;
+use App\Jobs\OrderCompletedJob;
 use App\Http\Resources\OrderResource;
 use App\Events\OrderCompletedEvent;
 
@@ -105,6 +106,13 @@ class OrderController extends Controller
         $order->save();
 
         // event(new OrderCompletedEvent($order));
+
+        $order = Order::find(1);
+
+        $array = $order->toArray();
+        $array['ambassador_revenue'] = $order->ambassador_revenue;
+
+        OrderCompletedJob::dispatch($array)->onQueue('email_topic');
 
         return [
             'message' => 'success'
