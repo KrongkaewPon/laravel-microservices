@@ -10,7 +10,7 @@ class UserService extends ApiService
 
     public function __construct()
     {
-        $this->endpoint = 'docker.for.mac.localhost:8001/api';
+        $this->endpoint = env('USERS_MS', 'http://users_ms:8000') . '/api';
     }
 
     public function post($path, $data)

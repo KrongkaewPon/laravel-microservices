@@ -1,15 +1,17 @@
 version: "3.9"
 services:
   user_backend:
+    container_name: users_ms
     build: .
-    ports:
-      - 8001:8000
     volumes:
       - /app/vendor
       - .:/app
     command: "php artisan serve --host=0.0.0.0"
     depends_on:
       - user_db
+    networks:
+      - users 
+
   user_db:
     image: amd64/mysql:8
     restart: always
@@ -19,3 +21,9 @@ services:
       MYSQL_PASSWORD: root
     volumes:
       - ./storage/dbdata:/var/lib/mysql
+    networks:
+      - users 
+
+networks:
+    users:
+        name: users 
