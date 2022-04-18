@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\AmbassadorController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LinkController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\StatsController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\StatsController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\LinkController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AmbassadorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,12 +25,12 @@ function common(string $scope)
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
 
-    Route::middleware(['auth:sanctum', $scope])->group(function () {
+    // Route::middleware(['auth:sanctum', $scope])->group(function () {
         Route::get('user', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::put('users/info', [AuthController::class, 'updateInfo']);
         Route::put('users/password', [AuthController::class, 'updatePassword']);
-    });
+    // });
 }
 
 //Admin

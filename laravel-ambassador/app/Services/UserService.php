@@ -17,4 +17,13 @@ class UserService extends ApiService
     {
         return \Http::post("{$this->endpoint}/{$path}", $data)->json();
     }
+
+    public function get($path)
+    {
+        return \Http::acceptJson()
+        ->withHeaders([
+            'Authorization' => 'Bearer ' . request()->cookie('jwt')
+        ])
+        ->get("{$this->endpoint}/{$path}");
+    }
 }
