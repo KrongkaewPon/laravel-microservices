@@ -2,25 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\UpdateInfoRequest;
-use App\Http\Requests\UpdatePasswordRequest;
-use App\Http\Resources\UserResource;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateInfoRequest;
+use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
+    public UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService =  new UserService();
+    }
+
     public function register(RegisterRequest $request)
     {
-        $user = User::create(
-            $request->only('first_name', 'last_name', 'email')
-            + [
-                'password' => \Hash::make($request->input('password')),
-                'is_admin' => $request->path() === 'api/admin/register' ? 1 : 0
-            ]
-        );
+        $data = $request->only('first_name', 'last_name', 'email', 'password')
+            + ['is_admin' => $request->path() === 'api/admin/register' ? 1 : 0];
+
+        $user = $this->userService->post("register", $data);
 
         return response($user, Response::HTTP_CREATED);
     }
