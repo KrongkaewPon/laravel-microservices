@@ -20,4 +20,19 @@ class AuthController extends Controller
 
         return response($user, Response::HTTP_CREATED);
     }
+    
+    public function login(Request $request)
+    {
+        if (!\Auth::attempt($request->only('email', 'password'))) {
+            return response([
+                'error' => 'invalid credentials'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $user = \Auth::user();
+
+        $jwt = $user->createToken('token', [$request->input('scope')])->plainTextToken;
+
+        return compact('jwt');
+    }
 }
