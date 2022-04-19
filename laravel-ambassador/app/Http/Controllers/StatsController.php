@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Link;
-use App\Models\Order;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Models\Order;
+use App\Models\Link;
 
 class StatsController extends Controller
 {
+    public UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService =  $userService;
+    }
+
     public function index(Request $request)
     {
-        $user = $request->user();
+        $user = $this->userService->get('user');
 
-        $links = Link::where('user_id', $user->id)->get();
+        $links = Link::where('user_id', $user['id'])->get();
 
         return $links->map(function (Link $link) {
             $orders = Order::where('code', $link->code)->where('complete', 1)->get();
@@ -22,7 +29,7 @@ class StatsController extends Controller
             return [
                 'code' => $link->code,
                 'count' => $orders->count(),
-                'revenue' => $orders->sum(fn(Order $order) => $order->ambassador_revenue)
+                'revenue' => $orders->sum(fn (Order $order) => $order->ambassador_revenue)
             ];
         });
     }
