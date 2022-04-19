@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Http\Request;
+use Closure;
+use App\Services\UserService;
 
 class ScopeAmbassadorMiddleware
 {
@@ -16,7 +17,9 @@ class ScopeAmbassadorMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->user()->tokenCan('ambassador')) {
+        $userService = (new UserService())->getRequest('get', 'scope/ambassador');
+
+        if (!$userService->ok()) {
             abort(401, 'unauthorized');
         }
 
