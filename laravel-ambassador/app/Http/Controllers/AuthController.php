@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use App\Services\UserService;
-use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UpdateInfoRequest;
 use App\Http\Requests\RegisterRequest;
@@ -16,7 +15,7 @@ class AuthController extends Controller
 
     public function __construct(UserService $userService)
     {
-        $this->userService =  new UserService();
+        $this->userService =  $userService;
     }
 
     public function register(RegisterRequest $request)
@@ -31,9 +30,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
+        return $_SERVER;
+        return $request->headers->all();
         $scope = $request->path() === 'api/admin/login'  ? 'admin' : 'ambassador';
-        
+
         $data = $request->only('email', 'password') + compact('scope');
 
         $response = $this->userService->post('login', $data);
@@ -54,6 +54,8 @@ class AuthController extends Controller
     {
         $cookie = \Cookie::forget('jwt');
 
+        $this->userService->post('logout', []);
+
         return response([
             'message' => 'success'
         ])->withCookie($cookie);
@@ -61,9 +63,7 @@ class AuthController extends Controller
 
     public function updateInfo(UpdateInfoRequest $request)
     {
-        $user = $request->user();
-
-        $user->update($request->only('first_name', 'last_name', 'email'));
+        $user = $this->userService->put('user/info', $request->only('first_name', 'last_name', 'email'));
 
         return response($user, Response::HTTP_ACCEPTED);
     }
@@ -72,10 +72,17 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        $user->update([
-            'password' => \Hash::make($request->input('password'))
-        ]);
+        $user = $this->userService->put('user/password', $request->only('password'));
 
         return response($user, Response::HTTP_ACCEPTED);
+    }
+
+    public function scopeCan(Request $request, $scope)
+    {
+        if (!$request->user()->tokenCan($scope)) {
+            abort(401, 'unauthorized');
+        }
+
+        return $next($request);
     }
 }

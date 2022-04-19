@@ -40,4 +40,33 @@ class AuthController extends Controller
     {
         return $request->user();
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response([
+            'message' => 'success'
+        ]);
+    }
+
+    public function updateInfo(Request $request)
+    {
+        $user = $request->user();
+
+        $user->update($request->only('first_name', 'last_name', 'email'));
+
+        return response($user, Response::HTTP_ACCEPTED);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = $request->user();
+
+        $user->update([
+            'password' => \Hash::make($request->input('password'))
+        ]);
+
+        return response($user, Response::HTTP_ACCEPTED);
+    }
 }

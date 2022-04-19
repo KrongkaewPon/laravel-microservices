@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Services\ApiService;
 
 class UserService extends ApiService
@@ -11,19 +12,5 @@ class UserService extends ApiService
     public function __construct()
     {
         $this->endpoint = env('USERS_MS', 'http://users_ms:8000') . '/api';
-    }
-
-    public function post($path, $data)
-    {
-        return \Http::post("{$this->endpoint}/{$path}", $data)->json();
-    }
-
-    public function get($path)
-    {
-        return \Http::acceptJson()
-        ->withHeaders([
-            'Authorization' => 'Bearer ' . request()->cookie('jwt')
-        ])
-        ->get("{$this->endpoint}/{$path}");
     }
 }
