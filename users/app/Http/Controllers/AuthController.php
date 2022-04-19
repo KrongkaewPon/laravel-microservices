@@ -20,7 +20,7 @@ class AuthController extends Controller
 
         return response($user, Response::HTTP_CREATED);
     }
-    
+
     public function login(Request $request)
     {
         if (!\Auth::attempt($request->only('email', 'password'))) {
@@ -68,5 +68,14 @@ class AuthController extends Controller
         ]);
 
         return response($user, Response::HTTP_ACCEPTED);
+    }
+
+    public function scopeCan(Request $request, $scope)
+    {
+        if (!$request->user()->tokenCan($scope)) {
+            abort(401, 'unauthorized');
+        }
+
+        return 'ok';
     }
 }

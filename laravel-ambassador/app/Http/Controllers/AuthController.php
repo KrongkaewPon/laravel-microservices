@@ -30,14 +30,12 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        return $_SERVER;
-        return $request->headers->all();
         $scope = $request->path() === 'api/admin/login'  ? 'admin' : 'ambassador';
 
         $data = $request->only('email', 'password') + compact('scope');
 
         $response = $this->userService->post('login', $data);
-        return $response;
+
         $cookie = cookie('jwt', $response['jwt'], 60 * 24); // 1 day
 
         return response([
@@ -75,14 +73,5 @@ class AuthController extends Controller
         $user = $this->userService->put('user/password', $request->only('password'));
 
         return response($user, Response::HTTP_ACCEPTED);
-    }
-
-    public function scopeCan(Request $request, $scope)
-    {
-        if (!$request->user()->tokenCan($scope)) {
-            abort(401, 'unauthorized');
-        }
-
-        return $next($request);
     }
 }
