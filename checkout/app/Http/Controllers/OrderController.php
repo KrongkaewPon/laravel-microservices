@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Services\UserService;
 use Illuminate\Http\Request;
 use Cartalyst\Stripe\Stripe;
-use App\Services\UserService;
 use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\Order;
 use App\Models\Link;
-use App\Jobs\OrderCompletedJob;
+use App\Jobs\OrderCompleted;
 
 class OrderController extends Controller
 {
@@ -74,7 +74,6 @@ class OrderController extends Controller
             }
 
             $stripe = Stripe::make(env('STRIPE_SECRET'));
-
             $source = $stripe->checkout()->sessions()->create([
                 'payment_method_types' => ['card'],
                 'line_items' => $lineItems,
@@ -108,14 +107,12 @@ class OrderController extends Controller
         $order->complete = 1;
         $order->save();
 
-        // event(new OrderCompletedEvent($order));
-
         $order = Order::find(1);
 
         $array = $order->toArray();
         $array['ambassador_revenue'] = $order->ambassador_revenue;
 
-        OrderCompletedJob::dispatch($array)->onQueue('email_topic');
+        OrderCompleted::dispatch($array)->onQueue('email_topic');
 
         return [
             'message' => 'success'

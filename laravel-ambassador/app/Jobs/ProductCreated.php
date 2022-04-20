@@ -8,18 +8,14 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Bus\Queueable;
+use App\Models\Product;
 
-class OrderCompletedJob implements ShouldQueue
+class ProductCreated implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $data;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
     public function __construct($data)
     {
         $this->data = $data;

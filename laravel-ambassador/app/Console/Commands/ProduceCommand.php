@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Order;
 use App\Jobs\ProduceJob;
-use App\Jobs\OrderCompletedJob;
+use App\Jobs\OrderCompleted;
 
 class ProduceCommand extends Command
 {
@@ -47,6 +47,6 @@ class ProduceCommand extends Command
         $array = $order->toArray();
         $array['ambassador_revenue'] = $order->ambassador_revenue;
 
-        OrderCompletedJob::dispatch($array)->onQueue('email_topic');
+        OrderCompleted::dispatch($array)->onQueue('email_topic');
     }
 }
