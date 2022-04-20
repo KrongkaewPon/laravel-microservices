@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ProductUpdatedEvent;
-use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Jobs\ProductUpdated;
+use App\Jobs\ProductDeleted;
+use App\Jobs\ProductCreated;
+use App\Events\ProductUpdatedEvent;
 
 class ProductController extends Controller
 {
@@ -20,7 +23,7 @@ class ProductController extends Controller
     {
         $product = Product::create($request->only('title', 'description', 'image', 'price'));
 
-        event(new ProductUpdatedEvent);
+        ProductCreated::dispatch($product->toArray())->onQueue('checkout_topic');
 
         return response($product, Response::HTTP_CREATED);
     }
@@ -34,7 +37,7 @@ class ProductController extends Controller
     {
         $product->update($request->only('title', 'description', 'image', 'price'));
 
-        event(new ProductUpdatedEvent);
+        ProductUpdated::dispatch($product->toArray())->onQueue('checkout_topic');
 
         return response($product, Response::HTTP_ACCEPTED);
     }
@@ -43,7 +46,7 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        event(new ProductUpdatedEvent);
+        ProductDeleted::dispatch($product->toArray())->onQueue('checkout_topic');
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
@@ -66,12 +69,12 @@ class ProductController extends Controller
         $page = $request->input('page', 1);
 
         /** @var Collection $products */
-        $products = \Cache::remember('products_backend', 30 * 60, fn() => Product::all());
+        $products = \Cache::remember('products_backend', 30 * 60, fn () => Product::all());
 
         if ($s = $request->input('s')) {
             $products = $products
                 ->filter(
-                    fn(Product $product) => Str::contains($product->title, $s) || Str::contains($product->description, $s)
+                    fn (Product $product) => Str::contains($product->title, $s) || Str::contains($product->description, $s)
                 );
         }
 
@@ -80,11 +83,11 @@ class ProductController extends Controller
         if ($sort = $request->input('sort')) {
             if ($sort === 'asc') {
                 $products = $products->sortBy([
-                    fn($a, $b) => $a['price'] <=> $b['price']
+                    fn ($a, $b) => $a['price'] <=> $b['price']
                 ]);
             } else if ($sort === 'desc') {
                 $products = $products->sortBy([
-                    fn($a, $b) => $b['price'] <=> $a['price']
+                    fn ($a, $b) => $b['price'] <=> $a['price']
                 ]);
             }
         }
