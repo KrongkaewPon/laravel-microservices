@@ -41,6 +41,6 @@ class Link extends Model
 
     public function orders()
     {
-        return $this->hasMany(Order::class, 'code', 'code')->where('complete', 1);
+        return $this->hasMany(Order::class, 'code', 'code');
     }
 }
