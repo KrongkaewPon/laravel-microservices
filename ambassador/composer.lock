@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12524947d8c752f84bc21aaaede06bfa",
+    "content-hash": "5ab3da9381594886fc73f9d6c4955bd3",
     "packages": [
         {
             "name": "brick/math",
@@ -892,6 +892,68 @@
                 }
             ],
             "time": "2022-03-20T21:55:58+00:00"
+        },
+        {
+            "name": "krongkaewpon/kafka-queue",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KrongkaewPon/kafka-queue.git",
+                "reference": "03cf282e753188c0cad280214b00a5b9c95148f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KrongkaewPon/kafka-queue/zipball/03cf282e753188c0cad280214b00a5b9c95148f7",
+                "reference": "03cf282e753188c0cad280214b00a5b9c95148f7",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.12|^9.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "authors": [
+                {
+                    "name": "Krongkaew Ponboobpha",
+                    "email": "krongkaew@enres.co"
+                }
+            ],
+            "support": {
+                "source": "https://github.com/KrongkaewPon/kafka-queue/tree/main",
+                "issues": "https://github.com/KrongkaewPon/kafka-queue/issues"
+            },
+            "time": "2022-04-17T17:54:39+00:00"
+        },
+        {
+            "name": "krongkaewpon/user-service",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KrongkaewPon/user-service.git",
+                "reference": "634b035f76bc2a328bed1c668058baf866f49193"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KrongkaewPon/user-service/zipball/634b035f76bc2a328bed1c668058baf866f49193",
+                "reference": "634b035f76bc2a328bed1c668058baf866f49193",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.12|^9.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "authors": [
+                {
+                    "name": "Krongkaew Ponboobpha",
+                    "email": "krongkaew@enres.co"
+                }
+            ],
+            "support": {
+                "source": "https://github.com/KrongkaewPon/user-service/tree/main",
+                "issues": "https://github.com/KrongkaewPon/user-service/issues"
+            },
+            "time": "2022-04-19T11:10:49+00:00"
         },
         {
             "name": "laravel/framework",
@@ -7734,7 +7796,10 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "krongkaewpon/kafka-queue": 20,
+        "krongkaewpon/user-service": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
