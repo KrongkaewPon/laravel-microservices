@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Services\UserService;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
-use App\Services\UserService;
 use App\Models\Order;
 use App\Models\Link;
 

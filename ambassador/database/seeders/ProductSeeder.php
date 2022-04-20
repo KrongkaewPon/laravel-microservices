@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Seeder;
 use App\Models\Product;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class ProductSeeder extends Seeder
     {
         $products = DB::connection('old_mysql')->table('products')->get();
 
-        foreach ($products as $product) {
+        foreach ($products as $product){
             Product::create([
                 'id' => $product->id,
                 'title' => $product->title,

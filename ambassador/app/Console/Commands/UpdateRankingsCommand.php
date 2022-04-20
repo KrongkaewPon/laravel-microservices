@@ -23,7 +23,7 @@ class UpdateRankingsCommand extends Command
 
         $ambassadors->each(function ($user) use ($bar) { //->where('complete', 1)
             $orders = Order::where('user_id', $user->id)->get();
-            $revenue =  $orders->sum(fn (Order $order) => $order->ambassador_revenue);
+            $revenue =  $orders->sum(fn (Order $order) => $order->total);
 
             Redis::zadd('rankings', (int)$revenue, $user->first_name . ' ' . $user->last_name);
 
