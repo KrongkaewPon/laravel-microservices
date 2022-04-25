@@ -111,9 +111,11 @@ class OrderController extends Controller
 
         $array = $order->toArray();
         $array['ambassador_revenue'] = $order->ambassador_revenue;
+        $array['order_items'] = $order->orderItems->toArray();
 
         OrderCompleted::dispatch($array)->onQueue('email_topic');
         OrderCompleted::dispatch($array)->onQueue('ambassador_topic');
+        OrderCompleted::dispatch($array)->onQueue('admin_topic');
 
         return [
             'message' => 'success'

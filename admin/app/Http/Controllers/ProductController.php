@@ -20,6 +20,7 @@ class ProductController extends Controller
     {
         $product = Product::create($request->only('title', 'description', 'image', 'price'));
 
+        ProductCreated::dispatch($product->toArray())->onQueue('ambassador_topic');
         ProductCreated::dispatch($product->toArray())->onQueue('checkout_topic');
 
         return response($product, Response::HTTP_CREATED);
@@ -34,6 +35,7 @@ class ProductController extends Controller
     {
         $product->update($request->only('title', 'description', 'image', 'price'));
 
+        ProductUpdated::dispatch($product->toArray())->onQueue('ambassador_topic');
         ProductUpdated::dispatch($product->toArray())->onQueue('checkout_topic');
 
         return response($product, Response::HTTP_ACCEPTED);
@@ -43,6 +45,7 @@ class ProductController extends Controller
     {
         $product->delete();
 
+        ProductDeleted::dispatch($product->toArray())->onQueue('ambassador_topic');
         ProductDeleted::dispatch(['id' => $product->id])->onQueue('checkout_topic');
 
         return response(null, Response::HTTP_NO_CONTENT);
